@@ -51,8 +51,10 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   // Pick an image (camera or gallery)
   Future<void> pickImage(bool isPlayer1) async {
     final ImagePicker picker = ImagePicker();
+
+    // Pick image from camera
     final XFile? image = await picker.pickImage(
-      source: ImageSource.gallery,
+      source: ImageSource.camera, // Change this to camera
     );
 
     if (image != null) {
@@ -66,37 +68,22 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     }
   }
 
-  File? selectedImage;
-
-  Future getImageFromGallery() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      selectedImage = File(returnedImage!.path);
-    });
-  }
-
-  Future getImageFromCamera() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-
-    setState(() {
-      selectedImage = File(returnedImage!.path);
-    });
-  }
-
   void startGame() {
+    final player1Name =
+        player1Controller.text.isEmpty ? 'Player 1' : player1Controller.text;
+    final player2Name =
+        player2Controller.text.isEmpty ? 'Player 2' : player2Controller.text;
+
     final player1 = {
-      'name': player1Controller.text,
+      'name': player1Name,
       'avatar': player1Avatar,
-      'score': players[player1Controller.text]?['score'] ?? 0,
+      'score': players[player1Name]?['score'] ?? 0,
     };
 
     final player2 = {
-      'name': player2Controller.text,
+      'name': player2Name,
       'avatar': player2Avatar,
-      'score': players[player2Controller.text]?['score'] ?? 0,
+      'score': players[player2Name]?['score'] ?? 0,
     };
 
     setState(() {
@@ -121,39 +108,57 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CommonHeader(pageTitle: 'Player info'),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Enter your details',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20.0),
-            buildPlayerRow(
-              'Player 1 Name',
-              player1Controller,
-              () => pickImage(true),
-              player1Avatar,
-              players.keys.toList(), // Pass the list of saved player names
-            ),
-            buildPlayerRow(
-              'Player 2 Name',
-              player2Controller,
-              () => pickImage(false),
-              player2Avatar,
-              players.keys.toList(),
-            ),
-            const SizedBox(height: 40.0),
-            ElevatedButton.icon(
-              onPressed: startGame,
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Start Match'),
-            ),
-            const SizedBox(height: 20.0),
-            buildSavedPlayersDebugWidget(),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade200, Colors.blue.shade800],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                'Enter your details',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20.0),
+              buildPlayerRow(
+                'Player 1 Name',
+                player1Controller,
+                player1Avatar, // Pass player 1 avatar path
+                players.keys.toList(),
+                true, // true for player 1
+              ),
+              const SizedBox(height: 20.0),
+              buildPlayerRow(
+                'Player 2 Name',
+                player2Controller,
+                player2Avatar, // Pass player 2 avatar path
+                players.keys.toList(),
+                false, // false for player 2
+              ),
+              const SizedBox(height: 40.0),
+              ElevatedButton.icon(
+                onPressed: startGame,
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Start Match'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade700, // Button background
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 32.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  elevation: 5,
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              buildSavedPlayersDebugWidget(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const CommonBottomBar(),
@@ -163,62 +168,93 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   Widget buildPlayerRow(
     String label,
     TextEditingController controller,
-    VoidCallback onPickImage,
     String? avatar,
-    List<String>
-        playerNames, // Add this parameter to pass existing player names
+    List<String> playerNames,
+    bool isPlayer1,
   ) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: onPickImage,
-          child: avatar == null
-              ? const Placeholder(fallbackWidth: 50, fallbackHeight: 50)
-              : Image.file(File(avatar),
-                  width: 50, height: 50, fit: BoxFit.cover),
-        ),
-        const SizedBox(width: 20.0),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DropdownButtonFormField<String>(
-                value: controller.text.isEmpty ? null : controller.text,
-                decoration: InputDecoration(
-                  labelText: label,
-                  border: const OutlineInputBorder(),
-                ),
-                items: playerNames.map((name) {
-                  return DropdownMenuItem<String>(
-                    value: name,
-                    child: Text(name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    controller.text = value;
-                  }
-                },
-                onSaved: (value) {
-                  controller.text = value ?? '';
-                },
-                isExpanded: true,
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () =>
+                  pickImage(isPlayer1), // Trigger pickImage method on tap
+              child: CircleAvatar(
+                radius: 30, // Make it round
+                backgroundColor: Colors.grey[300], // Placeholder background
+                child: avatar == null
+                    ? const Icon(Icons.camera_alt,
+                        size: 30) // Show camera icon if no avatar
+                    : ClipOval(
+                        child: Image.file(
+                          File(avatar),
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ),
-              const SizedBox(height: 10.0),
-              TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                  hintText: 'Or type a new name...',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  // Optionally validate or update the player list dynamically
-                },
+            ),
+            const SizedBox(width: 20.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Dropdown to select player from the list
+                  DropdownButtonFormField<String>(
+                    value: controller.text.isEmpty ? null : controller.text,
+                    decoration: InputDecoration(
+                      labelText: label,
+                      border: const OutlineInputBorder(),
+                    ),
+                    items: playerNames.map((name) {
+                      return DropdownMenuItem<String>(
+                        value: name,
+                        child: Text(name),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.text = value;
+                        // Check if the selected player has an avatar
+                        if (players.containsKey(value)) {
+                          final selectedPlayerAvatar =
+                              players[value]?['avatar'];
+                          setState(() {
+                            if (isPlayer1) {
+                              player1Avatar = selectedPlayerAvatar;
+                            } else {
+                              player2Avatar = selectedPlayerAvatar;
+                            }
+                          });
+                        }
+                      }
+                    },
+                    onSaved: (value) {
+                      controller.text = value ?? '';
+                    },
+                    isExpanded: true,
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      hintText: 'Or type a new name...',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      // Optionally validate or update the player list dynamically
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
