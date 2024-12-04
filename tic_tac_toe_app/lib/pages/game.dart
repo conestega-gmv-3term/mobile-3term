@@ -84,13 +84,13 @@ class _GameScreenState extends State<GameScreen> {
       appBar: const CommonHeader(pageTitle: 'Game Board'),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: [Padding(padding: EdgeInsets.only(top:15)),
           // Display the winner or current turn
           Text(
             winner != null
                 ? 'Winner: $winner'
                 : 'Current Turn: $currentPlayer (${currentPlayer == 'X' ? widget.player1 : widget.player2})',
-            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold), 
           ),
           const SizedBox(height: 20.0),
           // Build the board dynamically
@@ -130,12 +130,12 @@ class _GameScreenState extends State<GameScreen> {
               },
             ),
           ),
-          const SizedBox(height: 20.0),
-          // Reset button
-          ElevatedButton(
-            onPressed: resetGame,
-            child: const Text('Restart Game'),
-          ),
+            Container(
+            padding: const EdgeInsets.all(2), margin: const EdgeInsets.only(bottom: 10),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const SizedBox(height: 20.0), ElevatedButton(onPressed: resetGame, child: const Text('Restart Game', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))), 
+            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(const Color.fromARGB(255, 67, 168, 250)))),
+            ])
+            ),
         ],
       ),
       bottomNavigationBar: const CommonBottomBar(),

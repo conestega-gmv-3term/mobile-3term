@@ -144,10 +144,10 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               const SizedBox(height: 40.0),
               ElevatedButton.icon(
                 onPressed: startGame,
-                icon: const Icon(Icons.play_arrow),
-                label: const Text('Start Match'),
+                icon: const Icon(Icons.play_arrow, color: Colors.white),
+                label: const Text('Start Match', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade700, // Button background
+                  backgroundColor: const Color.fromARGB(255, 39, 101, 137), // Button background
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 32.0),
                   shape: RoundedRectangleBorder(
