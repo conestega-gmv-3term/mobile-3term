@@ -20,7 +20,7 @@ class CommonHeader extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white70,
               fontWeight: FontWeight.w400,
             ),
-          ),
+          ), 
           Text(
             pageTitle,
             style: const TextStyle(
