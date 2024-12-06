@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tic_tac_toe_app/widgets/common_header.dart';
@@ -38,23 +37,10 @@ class _GameScreenState extends State<GameScreen> {
         board[row][col] = currentPlayer;
         if (checkWinner(row, col)) {
           winner = currentPlayer;
-          updatePlayerScore(
-              currentPlayer == 'X' ? widget.player1 : widget.player2);
         } else {
           currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'; // Switch turns
         }
       });
-    }
-  }
-
-  //Increase the score
-  Future<void> updatePlayerScore(String playerName) async {
-    final prefs = await SharedPreferences.getInstance();
-    final playersString = prefs.getString('players');
-    if (playersString != null) {
-      final players = Map<String, Map<String, dynamic>>.from(jsonDecode(playersString));
-      players[playerName]?['score'] = (players[playerName]?['score'] ?? 0) + 1;
-      prefs.setString('players', jsonEncode(players));
     }
   }
 
