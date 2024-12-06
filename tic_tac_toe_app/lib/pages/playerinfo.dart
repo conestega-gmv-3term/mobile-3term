@@ -107,59 +107,79 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: const CommonHeader(pageTitle: 'Player info'),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color.fromRGBO(255, 167, 144, 249), Color.fromRGBO(20, 57, 204, 0.655)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                'Enter your details',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20.0),
-              buildPlayerRow(
-                'Player 1 Name',
-                player1Controller,
-                player1Avatar, // Pass player 1 avatar path
-                players.keys.toList(),
-                true, // true for player 1
-              ),
-              const SizedBox(height: 20.0),
-              buildPlayerRow(
-                'Player 2 Name',
-                player2Controller,
-                player2Avatar, // Pass player 2 avatar path
-                players.keys.toList(),
-                false, // false for player 2
-              ),
-              const SizedBox(height: 40.0),
-              ElevatedButton.icon(
-                onPressed: startGame,
-                icon: const Icon(Icons.play_arrow, color: Colors.white),
-                label: const Text('Start Match', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(48, 84, 227, 89), // Button background
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 32.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  elevation: 5,
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(255, 167, 144, 249),
+                    Color.fromRGBO(20, 57, 204, 0.655),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
-              // const SizedBox(height: 20.0),
-              // buildSavedPlayersDebugWidget(),
-            ],
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Enter your details',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      buildPlayerRow(
+                        'Player 1 Name',
+                        player1Controller,
+                        player1Avatar,
+                        players.keys.toList(),
+                        true,
+                      ),
+                      const SizedBox(height: 20.0),
+                      buildPlayerRow(
+                        'Player 2 Name',
+                        player2Controller,
+                        player2Avatar,
+                        players.keys.toList(),
+                        false,
+                      ),
+                      const SizedBox(height: 40.0),
+                      ElevatedButton.icon(
+                        onPressed: startGame,
+                        icon: const Icon(Icons.play_arrow, color: Colors.white),
+                        label: const Text(
+                          'Start Match',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromRGBO(48, 84, 227, 89),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 32.0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
       bottomNavigationBar: const CommonBottomBar(),
     );
