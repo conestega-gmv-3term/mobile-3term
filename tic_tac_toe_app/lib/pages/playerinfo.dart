@@ -109,9 +109,9 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     return Scaffold(
       appBar: const CommonHeader(pageTitle: 'Player info'),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade200, Colors.blue.shade800],
+            colors: [Color.fromRGBO(255, 167, 144, 249), Color.fromRGBO(20, 57, 204, 0.655)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -147,7 +147,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                 icon: const Icon(Icons.play_arrow, color: Colors.white),
                 label: const Text('Start Match', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 39, 101, 137), // Button background
+                  backgroundColor: const Color.fromRGBO(48, 84, 227, 89), // Button background
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 32.0),
                   shape: RoundedRectangleBorder(
@@ -155,8 +155,8 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                   elevation: 5,
                 ),
               ),
-              const SizedBox(height: 20.0),
-              buildSavedPlayersDebugWidget(),
+              // const SizedBox(height: 20.0),
+              // buildSavedPlayersDebugWidget(),
             ],
           ),
         ),
