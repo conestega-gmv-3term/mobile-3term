@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'pages/playerinfo.dart';
 import 'pages/game.dart';
 import 'pages/ranks.dart';
 import 'pages/home.dart';
-import 'widgets/common_header.dart';
-import 'widgets/common_bottom_bar.dart';
 
 void main() {
   runApp(MyApp());

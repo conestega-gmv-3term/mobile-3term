@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe_app/widgets/common_header.dart';
 import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class GameScreen extends StatefulWidget {
   final String player1;
@@ -11,6 +13,8 @@ class GameScreen extends StatefulWidget {
     Key? key,
     this.player1 = "Player 1",
     this.player2 = "Player 2",
+
+    
   }) : super(key: key);
 
   @override
@@ -28,6 +32,27 @@ class _GameScreenState extends State<GameScreen> {
   String currentPlayer = 'X'; // 'X' starts the game
   String? winner; // Winner state
 
+// Function to check if the game has ended in a draw
+  bool isDraw() {
+    return board.every((row) => row.every((cell) => cell.isNotEmpty)) && winner == null;
+  }
+
+  Future<void> updateScore() async {
+    if (winner != null) {
+      final winnerName = (winner == 'X' ? widget.player1 : widget.player2);
+      final prefs = await SharedPreferences.getInstance();
+      final playersString = prefs.getString('players');
+      if (playersString != null) {
+        final players = Map<String, dynamic>.from(jsonDecode(playersString));
+        final player = players[winnerName];
+        if (player != null) {
+          player['score'] = (player['score'] ?? 0) + 1;
+          await prefs.setString('players', jsonEncode(players));
+        }
+      }
+    }
+  }
+
   // Handle player move
   void handleTap(int row, int col) {
     if (board[row][col] == '' && winner == null) {
@@ -35,6 +60,9 @@ class _GameScreenState extends State<GameScreen> {
         board[row][col] = currentPlayer;
         if (checkWinner(row, col)) {
           winner = currentPlayer;
+          updateScore();
+        } else if (isDraw()) {
+          // Handle draw if needed
         } else {
           currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'; // Switch turns
         }
