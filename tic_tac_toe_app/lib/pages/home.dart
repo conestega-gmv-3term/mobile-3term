@@ -15,40 +15,36 @@ class HomeScreen extends StatelessWidget {
         children: [
             Container(
             padding: const EdgeInsets.all(20), margin: const EdgeInsets.all(3.5),child:const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text("Welcome to the game!", style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold))])
+            Text("Welcome to the game!", style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 255, 255, 255)))])
             ),
             Container(
-            padding: const EdgeInsets.all(1), margin: const EdgeInsets.all(3.5),child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image.asset('assets/default.png')])
-            ),
-            Container(
-            padding: const EdgeInsets.all(0), margin: const EdgeInsets.only(top: 50),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 40.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(const Color.fromARGB(255, 67, 168, 250))),onPressed: () {
+            padding: const EdgeInsets.all(0), margin: const EdgeInsets.only(top: 100),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const SizedBox(height: 60.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(  const Color.fromARGB(255, 255, 255, 255))),onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                 builder: (context) => const PlayerInfoScreen()),
               );
             },
-            child: const Text('New Game', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+            child: const Text('New Game', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
             )
             ])
             ),
             Container(
             padding: const EdgeInsets.all(7), margin: const EdgeInsets.all(3.5),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 20.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(const Color.fromARGB(255, 67, 168, 250))),onPressed: () {
+            const SizedBox(height: 60.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(const Color.fromARGB(255, 255, 255, 255))),onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                 builder: (context) => const RanksScreen()),
               );
             },
-            child: const Text('Ranks',style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+            child: const Text('Ranks',style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
             )
             ])
             ),
         ],
-      ),
+      ), backgroundColor: const Color.fromRGBO(69, 48, 227, 89),
       bottomNavigationBar: const CommonBottomBar(),
     );
   }
