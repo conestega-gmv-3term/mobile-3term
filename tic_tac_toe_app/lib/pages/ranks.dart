@@ -14,6 +14,7 @@ class RanksScreen extends StatefulWidget {
 
 class _RanksScreenState extends State<RanksScreen> {
   List<Map<String, dynamic>> _players = [];
+  List<Map<String, dynamic>> _topThreeByScore = [];
   bool _isScoreSorted = true; // Initially sort by score
 
   @override
@@ -28,7 +29,20 @@ class _RanksScreenState extends State<RanksScreen> {
     if (playersString != null) {
       final players = Map<String, dynamic>.from(jsonDecode(playersString));
       
-      // Load players and sort them
+      // Load players and sort them by score to determine top three
+      List<Map<String, dynamic>> sortedByScore = players.entries.map((entry) {
+        return {
+          'name': entry.key,
+          'score': entry.value['score'] as int? ?? 0,
+          'avatar': entry.value['avatar'],
+        };
+      }).toList();
+      sortedByScore.sort((a, b) => b['score'].compareTo(a['score']));
+
+      // Save the top three based on score
+      _topThreeByScore = sortedByScore.sublist(0, sortedByScore.length >= 3 ? 3 : sortedByScore.length);
+
+      // Now sort players based on current sorting method
       _sortPlayers(players);
     }
   }
@@ -57,13 +71,14 @@ class _RanksScreenState extends State<RanksScreen> {
     setState(() {
       _isScoreSorted = !_isScoreSorted;
     });
-    _loadPlayers(); // Reload and sort players
+    _loadPlayers(); // Reload and sort players, but keep top three from score sorting
   }
 
-  Widget _buildPlaceIcon(int index) {
+  Widget _buildPlaceIcon(String playerName) {
+    int index = _topThreeByScore.indexWhere((player) => player['name'] == playerName);
     switch (index) {
       case 0:
-        return Icon(Icons.stars, color: Colors.amberAccent);
+        return Icon(Icons.stars, color: Colors.amber);
       case 1:
         return Icon(Icons.star, color: Colors.grey[400]);
       case 2:
@@ -76,7 +91,8 @@ class _RanksScreenState extends State<RanksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonHeader(pageTitle: 'Player Rankings', 
+      appBar: CommonHeader(
+        pageTitle: 'Player Rankings', 
         actions: [
           IconButton(
             icon: Icon(_isScoreSorted ? Icons.sort_by_alpha : Icons.leaderboard),
@@ -109,15 +125,18 @@ class _RanksScreenState extends State<RanksScreen> {
                         : Icon(Icons.person),
                     title: Row(
                       children: [
-                        _buildPlaceIcon(index),
+                        _buildPlaceIcon(player['name']),
                         SizedBox(width: 10),
                         Text(
                           player['name'],
                           style: TextStyle(
-                            color: index == 0 ? Colors.amberAccent : 
-                                   index == 1 ? Colors.grey[400] : 
-                                   index == 2 ? Colors.brown : null,
-                            fontWeight: index < 3 ? FontWeight.bold : FontWeight.normal,
+                            color: _topThreeByScore.any((p) => p['name'] == player['name']) 
+                              ? (_topThreeByScore.indexOf(player) == 0 ? Colors.amber : 
+                                 _topThreeByScore.indexOf(player) == 1 ? Colors.grey[400] : Colors.brown) 
+                              : null,
+                            fontWeight: _topThreeByScore.any((p) => p['name'] == player['name']) 
+                              ? FontWeight.bold 
+                              : FontWeight.normal,
                           ),
                         ),
                       ],
