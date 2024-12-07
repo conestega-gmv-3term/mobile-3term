@@ -8,6 +8,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,9 +19,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/home', // Set initial route to the Game screen
       routes: {
-        '/game': (context) => GameScreen(),
-        '/home': (context) => HomeScreen(),
-        '/ranks': (context) => RanksScreen(),
+        '/game': (context) => const GameScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/ranks': (context) => const RanksScreen(),
       },
     );
   }

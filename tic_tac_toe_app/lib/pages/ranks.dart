@@ -14,6 +14,7 @@ class RanksScreen extends StatefulWidget {
 
 class _RanksScreenState extends State<RanksScreen> {
   List<Map<String, dynamic>> _players = [];
+  bool _isScoreSorted = true; // Initially sort by score
 
   @override
   void initState() {
@@ -21,33 +22,68 @@ class _RanksScreenState extends State<RanksScreen> {
     _loadPlayers();
   }
 
-  // Method to load players from SharedPreferences
   Future<void> _loadPlayers() async {
     final prefs = await SharedPreferences.getInstance();
     final playersString = prefs.getString('players');
     if (playersString != null) {
       final players = Map<String, dynamic>.from(jsonDecode(playersString));
       
-      // Sort players by score in descending order
-      final sortedPlayers = players.entries.map((entry) {
-        return {
-          'name': entry.key,
-          'score': entry.value['score'] as int? ?? 0,
-          'avatar': entry.value['avatar'],
-        };
-      }).toList()
-      ..sort((a, b) => b['score'].compareTo(a['score']));
+      // Load players and sort them
+      _sortPlayers(players);
+    }
+  }
 
-      setState(() {
-        _players = sortedPlayers;
-      });
+  void _sortPlayers(Map<String, dynamic> players) {
+    List<Map<String, dynamic>> sortedPlayers = players.entries.map((entry) {
+      return {
+        'name': entry.key,
+        'score': entry.value['score'] as int? ?? 0,
+        'avatar': entry.value['avatar'],
+      };
+    }).toList();
+
+    if (_isScoreSorted) {
+      sortedPlayers.sort((a, b) => b['score'].compareTo(a['score']));
+    } else {
+      sortedPlayers.sort((a, b) => a['name'].compareTo(b['name']));
+    }
+
+    setState(() {
+      _players = sortedPlayers;
+    });
+  }
+
+  void _toggleSort() {
+    setState(() {
+      _isScoreSorted = !_isScoreSorted;
+    });
+    _loadPlayers(); // Reload and sort players
+  }
+
+  Widget _buildPlaceIcon(int index) {
+    switch (index) {
+      case 0:
+        return Icon(Icons.stars, color: Colors.amberAccent);
+      case 1:
+        return Icon(Icons.star, color: Colors.grey[400]);
+      case 2:
+        return Icon(Icons.star_half, color: Colors.brown);
+      default:
+        return SizedBox.shrink();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonHeader(pageTitle: 'Player Rankings'),
+      appBar: CommonHeader(pageTitle: 'Player Rankings', 
+        actions: [
+          IconButton(
+            icon: Icon(_isScoreSorted ? Icons.sort_by_alpha : Icons.leaderboard),
+            onPressed: _toggleSort,
+          ),
+        ],
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -71,7 +107,21 @@ class _RanksScreenState extends State<RanksScreen> {
                             backgroundImage: FileImage(File(player['avatar'])),
                           )
                         : Icon(Icons.person),
-                    title: Text(player['name']),
+                    title: Row(
+                      children: [
+                        _buildPlaceIcon(index),
+                        SizedBox(width: 10),
+                        Text(
+                          player['name'],
+                          style: TextStyle(
+                            color: index == 0 ? Colors.amberAccent : 
+                                   index == 1 ? Colors.grey[400] : 
+                                   index == 2 ? Colors.brown : null,
+                            fontWeight: index < 3 ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
                     trailing: Text('Score: ${player['score']}'),
                   );
                 },

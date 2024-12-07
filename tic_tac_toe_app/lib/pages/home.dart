@@ -5,7 +5,7 @@ import 'package:tic_tac_toe_app/widgets/common_header.dart';
 import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Container(
             padding: const EdgeInsets.all(0), margin: const EdgeInsets.only(top: 100),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 60.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(  const Color.fromARGB(255, 255, 255, 255))),onPressed: () {
+            const SizedBox(height: 60.0), ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll<Color>(  Color.fromARGB(255, 255, 255, 255))),onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Container(
             padding: const EdgeInsets.all(7), margin: const EdgeInsets.all(3.5),child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 60.0), ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(const Color.fromARGB(255, 255, 255, 255))),onPressed: () {
+            const SizedBox(height: 60.0), ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(255, 255, 255, 255))),onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(

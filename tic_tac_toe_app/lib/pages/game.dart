@@ -10,12 +10,12 @@ class GameScreen extends StatefulWidget {
 
   // Constructor that takes the players names as optional and set a default.
   const GameScreen({
-    Key? key,
+    super.key,
     this.player1 = "Player 1",
     this.player2 = "Player 2",
 
     
-  }) : super(key: key);
+  });
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -113,7 +113,7 @@ class _GameScreenState extends State<GameScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(padding: EdgeInsets.only(top: 15)),
+          const Padding(padding: EdgeInsets.only(top: 15)),
           // Display the winner or current turn
           Text(
             winner != null

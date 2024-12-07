@@ -10,7 +10,7 @@ import 'package:tic_tac_toe_app/widgets/common_header.dart';
 import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
 
 class PlayerInfoScreen extends StatefulWidget {
-  const PlayerInfoScreen({Key? key}) : super(key: key);
+  const PlayerInfoScreen({super.key});
 
   @override
   State<PlayerInfoScreen> createState() => _PlayerInfoScreenState();
