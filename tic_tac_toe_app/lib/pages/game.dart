@@ -13,8 +13,6 @@ class GameScreen extends StatefulWidget {
     super.key,
     this.player1 = "Player 1",
     this.player2 = "Player 2",
-
-    
   });
 
   @override
@@ -34,7 +32,8 @@ class _GameScreenState extends State<GameScreen> {
 
 // Function to check if the game has ended in a draw
   bool isDraw() {
-    return board.every((row) => row.every((cell) => cell.isNotEmpty)) && winner == null;
+    return board.every((row) => row.every((cell) => cell.isNotEmpty)) &&
+        winner == null;
   }
 
   Future<void> updateScore() async {
@@ -72,24 +71,46 @@ class _GameScreenState extends State<GameScreen> {
 
   // Check if the current move resulted in a win
   bool checkWinner(int row, int col) {
-    // Check row
-    if (board[row].every((cell) => cell == currentPlayer)) return true;
-
-    // Check column
-    if (board.every((r) => r[col] == currentPlayer)) return true;
-
-    // Check main diagonal
-    if (row == col &&
-        board.every((r) => r[board.indexOf(r)] == currentPlayer)) {
+    if (board[1][1] == board[1][0] &&
+        board[1][1] == board[1][2] &&
+        board[1][1] != "") {
       return true;
     }
-
-    // Check anti-diagonal
-    if (row + col == 2 &&
-        board.every((r) => r[2 - board.indexOf(r)] == currentPlayer)) {
+    if (board[1][1] == board[0][1] &&
+        board[1][1] == board[2][1] &&
+        board[1][1] != "") {
       return true;
     }
-
+    if (board[1][1] == board[0][0] &&
+        board[1][1] == board[2][2] &&
+        board[1][1] != "") {
+      return true;
+    }
+    if (board[1][1] == board[0][2] &&
+        board[1][1] == board[2][0] &&
+        board[1][1] != "") {
+      return true;
+    }
+    if (board[1][0] == board[0][0] &&
+        board[1][0] == board[2][0] &&
+        board[1][0] != "") {
+      return true;
+    }
+    if (board[1][2] == board[0][2] &&
+        board[1][2] == board[2][2] &&
+        board[1][2] != "") {
+      return true;
+    }
+    if (board[0][0] == board[0][1] &&
+        board[0][0] == board[0][2] &&
+        board[0][0] != "") {
+      return true;
+    }
+    if (board[2][0] == board[2][1] &&
+        board[2][0] == board[2][2] &&
+        board[2][0] != "") {
+      return true;
+    }
     return false;
   }
 
@@ -117,13 +138,16 @@ class _GameScreenState extends State<GameScreen> {
           // Display the winner or current turn
           Text(
             winner != null
-                ? 'Winner: $winner'
+                ? 'Winner: $winner  (${winner == 'X' ? widget.player1 : widget.player2})'
                 : 'Current Turn: $currentPlayer (${currentPlayer == 'X' ? widget.player1 : widget.player2})',
-            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white),
+            style: const TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
-          const SizedBox(height: 20.0),
-          // Build the board dynamically
-          Expanded(
+          SizedBox(
+            height: 400,
+            width: 400,
             child: GridView.builder(
               padding: const EdgeInsets.all(16.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -133,8 +157,49 @@ class _GameScreenState extends State<GameScreen> {
               ),
               itemCount: 9,
               itemBuilder: (context, index) {
-                final row = index ~/ 3;
-                final col = index % 3;
+                var row;
+                var col;
+
+                //identify the position of the square
+                switch (index) {
+                  case 0:
+                    row = 0;
+                    col = 0;
+
+                  case 1:
+                    row = 0;
+                    col = 1;
+
+                  case 2:
+                    row = 0;
+                    col = 2;
+
+                  case 3:
+                    row = 1;
+                    col = 0;
+
+                    break;
+                  case 4:
+                    row = 1;
+                    col = 1;
+
+                  case 5:
+                    row = 1;
+                    col = 2;
+
+                  case 6:
+                    row = 2;
+                    col = 0;
+
+                  case 7:
+                    row = 2;
+                    col = 1;
+
+                    break;
+                  case 8:
+                    row = 2;
+                    col = 2;
+                }
                 return GestureDetector(
                   onTap: () => handleTap(row, col),
                   child: Container(
@@ -167,10 +232,12 @@ class _GameScreenState extends State<GameScreen> {
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                     onPressed: resetGame,
-                    child: const Text('Restart Game', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)))),
+                    child: const Text('Restart Game',
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)))),
               ])),
         ],
-      ), backgroundColor: const Color.fromRGBO(48, 84, 227, 89),
+      ),
+      backgroundColor: const Color.fromRGBO(48, 84, 227, 89),
       bottomNavigationBar: const CommonBottomBar(),
     );
   }
