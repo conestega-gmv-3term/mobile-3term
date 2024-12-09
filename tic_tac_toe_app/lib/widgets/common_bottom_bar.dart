@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CommonBottomBar extends StatelessWidget {
-  const CommonBottomBar({Key? key}) : super(key: key);
+  const CommonBottomBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class CommonBottomBar extends StatelessWidget {
       ),
     );
 
-    overlay?.insert(overlayEntry);
+    overlay.insert(overlayEntry);
 
     // I'm removing the tooltip after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {

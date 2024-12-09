@@ -5,7 +5,7 @@ import 'package:tic_tac_toe_app/widgets/common_header.dart';
 import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
