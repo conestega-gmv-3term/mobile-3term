@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CommonHeader extends StatelessWidget implements PreferredSizeWidget {
   final String pageTitle;
+  final List<Widget>? actions; // Added this parameter
 
-  //This will be called at the screens receiving the name as a parameter
-  const CommonHeader({Key? key, required this.pageTitle}) : super(key: key);
+  // Constructor now accepts actions
+  const CommonHeader({super.key, required this.pageTitle, this.actions});
 
-  //The idea is to build a standardized header for all pages
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -20,12 +20,12 @@ class CommonHeader extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white70,
               fontWeight: FontWeight.w400,
             ),
-          ), 
+          ),
           Text(
             pageTitle,
             style: const TextStyle(
               fontSize: 20.0,
-              color: Colors.white,
+              color: Color.fromARGB(255, 242, 242, 242),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -43,6 +43,7 @@ class CommonHeader extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 5.0, // Optional: Adds shadow
       shadowColor: Colors.grey.withOpacity(0.5),
+      actions: actions, // This line uses the actions parameter
     );
   }
 
