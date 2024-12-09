@@ -32,9 +32,9 @@ class HomeScreen extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const SizedBox(height: 60.0),
                 ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll<Color>(
-                          const Color.fromARGB(255, 255, 255, 255))),
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                          Color.fromARGB(255, 255, 255, 255))),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -53,9 +53,9 @@ class HomeScreen extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const SizedBox(height: 60.0),
                 ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll<Color>(
-                          const Color.fromARGB(255, 255, 255, 255))),
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                          Color.fromARGB(255, 255, 255, 255))),
                   onPressed: () {
                     Navigator.push(
                       context,

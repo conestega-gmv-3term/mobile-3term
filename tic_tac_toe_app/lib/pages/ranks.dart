@@ -6,7 +6,7 @@ import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
 import 'dart:io';
 
 class RanksScreen extends StatefulWidget {
-  const RanksScreen({Key? key}) : super(key: key);
+  const RanksScreen({super.key});
 
   @override
   _RanksScreenState createState() => _RanksScreenState();
@@ -78,13 +78,13 @@ class _RanksScreenState extends State<RanksScreen> {
     int index = _topThreeByScore.indexWhere((player) => player['name'] == playerName);
     switch (index) {
       case 0:
-        return Icon(Icons.stars, color: Colors.amber);
+        return const Icon(Icons.stars, color: Colors.amber);
       case 1:
         return Icon(Icons.star, color: Colors.grey[400]);
       case 2:
-        return Icon(Icons.star_half, color: Colors.brown);
+        return const Icon(Icons.star_half, color: Colors.brown);
       default:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
     }
   }
 
@@ -101,7 +101,7 @@ class _RanksScreenState extends State<RanksScreen> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(255, 167, 144, 249),
@@ -112,7 +112,7 @@ class _RanksScreenState extends State<RanksScreen> {
           ),
         ),
         child: _players.isEmpty
-            ? Center(child: Text('No players in the rankings yet.'))
+            ? const Center(child: Text('No players in the rankings yet.'))
             : ListView.builder(
                 itemCount: _players.length,
                 itemBuilder: (context, index) {
@@ -122,11 +122,11 @@ class _RanksScreenState extends State<RanksScreen> {
                         ? CircleAvatar(
                             backgroundImage: FileImage(File(player['avatar'])),
                           )
-                        : Icon(Icons.person),
+                        : const Icon(Icons.person),
                     title: Row(
                       children: [
                         _buildPlaceIcon(player['name']),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           player['name'],
                           style: TextStyle(

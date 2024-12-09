@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe_app/widgets/common_header.dart';
-import 'package:tic_tac_toe_app/widgets/common_bottom_bar.dart';
 
 class VictoryPage extends StatelessWidget {
   final String winner;
