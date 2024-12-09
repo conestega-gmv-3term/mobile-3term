@@ -2,11 +2,13 @@
 
 ## About the project
 
-### Built with
+This was a project made in Flutter for the final of Programming Mobile Applications.
 
-## Project features
 
-- [x] Screen1
+
+### Planed screens and features
+
+<img src="./docs/img/WhatsApp Image 2024-11-15 at 20.20.45.jpeg" width=50%></img>
 
 ## License
 
