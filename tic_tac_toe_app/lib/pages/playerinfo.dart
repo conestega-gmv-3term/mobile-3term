@@ -283,28 +283,4 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
       ),
     );
   }
-
-  // Widget to display saved players
-  Widget buildSavedPlayersDebugWidget() {
-    return Expanded(
-      child: ListView(
-        children: players.entries
-            .map(
-              (entry) => ListTile(
-                leading: entry.value['avatar'] != null
-                    ? Image.file(
-                        File(entry.value['avatar']),
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.person),
-                title: Text(entry.key),
-                subtitle: Text('Score: ${entry.value['score']}'),
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
 }
