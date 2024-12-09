@@ -6,7 +6,7 @@ class GameScreen extends StatefulWidget {
   final String player1;
   final String player2;
 
-  // Constructor that takes the players names as optional and set a default.
+  
   const GameScreen({
     Key? key,
     this.player1 = "Player 1",
@@ -16,52 +16,80 @@ class GameScreen extends StatefulWidget {
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
-
 class _GameScreenState extends State<GameScreen> {
-  // Define a 3x3 board for Tic Tac Toe
+  
+  //The positions of the Game
   List<List<String>> board = [
     ['', '', ''],
     ['', '', ''],
     ['', '', ''],
   ];
 
-  String currentPlayer = 'X'; // 'X' starts the game
-  String? winner; // Winner state
+  String currentPlayer = 'X'; // First to play
+  String? winner; //If there is a winner
+  int isDraw=0; //Check if it IS a draw
 
-  // Handle player move
-  void handleTap(int row, int col) {
-    if (board[row][col] == '' && winner == null) {
+  //If the player taps a square
+  void isTap(int row, int col) {
+    isDraw++;
+    if (isDraw != 9 && winner == null) {
+      
       setState(() {
         board[row][col] = currentPlayer;
-        if (checkWinner(row, col)) {
+        if (checkWinner(row, col)) 
+        {
           winner = currentPlayer;
-        } else {
-          currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'; // Switch turns
+        } 
+        else 
+        {
+          if(currentPlayer=="X")
+          {
+            currentPlayer = "O";
+          }
+          else
+          {
+            currentPlayer = "X";
+          }
         }
       });
     }
   }
 
-  // Check if the current move resulted in a win
+  // Check if there is a winner
   bool checkWinner(int row, int col) {
-    // Check row
-    if (board[row].every((cell) => cell == currentPlayer)) return true;
 
-    // Check column
-    if (board.every((r) => r[col] == currentPlayer)) return true;
-
-    // Check main diagonal
-    if (row == col &&
-        board.every((r) => r[board.indexOf(r)] == currentPlayer)) {
+    if(board[1][1]==board[1][0] && board[1][1]==board[1][2] && board[1][1]!="")
+    {
       return true;
     }
-
-    // Check anti-diagonal
-    if (row + col == 2 &&
-        board.every((r) => r[2 - board.indexOf(r)] == currentPlayer)) {
+    if(board[1][1]==board[0][1] && board[1][1]==board[2][1] && board[1][1]!="")
+    {
       return true;
     }
-
+    if(board[1][1]==board[0][0] && board[1][1]==board[2][2] && board[1][1]!="")
+    {
+      return true;
+    }
+    if(board[1][1]==board[0][2] && board[1][1]==board[2][0] && board[1][1]!="")
+    {
+       return true;
+    }
+    if(board[1][0]==board[0][0] && board[1][0]==board[2][0] && board[1][0]!="")
+    {
+       return true;
+    }
+    if(board[1][2]==board[0][2] && board[1][2]==board[2][2] && board[1][2]!="")
+    {
+       return true;
+    }
+    if(board[0][0]==board[0][1] && board[0][0]==board[0][2] && board[0][0]!="")
+    {
+       return true;
+    }
+    if(board[2][0]==board[2][1] && board[2][0]==board[2][2] && board[2][0]!="")
+    {
+       return true;
+    }
     return false;
   }
 
@@ -75,7 +103,25 @@ class _GameScreenState extends State<GameScreen> {
       ];
       currentPlayer = 'X';
       winner = null;
+      isDraw=0;
     });
+  }
+  
+  //Display the message
+  String checkMessage()
+  {
+    if(winner!=null)
+    {
+      return "Winner: $winner";
+    }
+    else if(isDraw==9)
+    {
+      return "It is a Draw";
+    }
+    else
+    {
+      return "Current Turn: $currentPlayer";
+    }
   }
 
   @override
@@ -86,45 +132,73 @@ class _GameScreenState extends State<GameScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(padding: EdgeInsets.only(top: 15)),
-          // Display the winner or current turn
-          Text(
-            winner != null
-                ? 'Winner: $winner'
-                : 'Current Turn: $currentPlayer (${currentPlayer == 'X' ? widget.player1 : widget.player2})',
-            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          const SizedBox(height: 20.0),
-          // Build the board dynamically
-          Expanded(
+          Text( "${checkMessage()}"),
+          SizedBox(
+            height: 400, width: 400,
             child: GridView.builder(
               padding: const EdgeInsets.all(16.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 3x3 grid
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
+                crossAxisCount: 3, //3 per line
+                mainAxisSpacing: 8, //spacing
+                crossAxisSpacing: 8,
               ),
-              itemCount: 9,
+              itemCount: 9, //Nine Squares
               itemBuilder: (context, index) {
-                final row = index ~/ 3;
-                final col = index % 3;
-                return GestureDetector(
-                  onTap: () => handleTap(row, col),
+                var row;
+                var col;
+
+                //identify the position of the square
+                switch (index) {
+                  case 0:
+                  row =0;
+                  col =0;
+
+                  case 1:
+                  row = 0;
+                  col = 1;
+
+                  case 2:
+                  row = 0;
+                  col = 2;
+
+                  case 3:
+                  row = 1;
+                  col = 0;
+
+                    break;
+                  case 4:
+                  row = 1;
+                  col = 1;
+
+
+                  case 5:
+                  row = 1;
+                  col = 2;
+
+
+                  case 6:
+                  row = 2;
+                  col = 0;
+
+                  case 7:
+                  row = 2;
+                  col = 1;
+
+                    break;
+                  case 8:
+                  row = 2;
+                  col = 2;
+                }
+                
+                return InkWell(
+                  onTap: () => isTap(row, col), //Tap
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2.0),
+                      border: Border.all(color: Colors.black, width: 2),
                       color: const Color.fromARGB(255, 226, 237, 246),
                     ),
                     child: Center(
-                      child: Text(
-                        board[row][col],
-                        style: TextStyle(
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.bold,
-                          color: board[row][col] == 'X'
-                              ? Colors.red
-                              : Colors.green,
-                        ),
-                      ),
+                      child: Text(board[row][col], style: const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color:  Color.fromARGB(255, 0, 0, 0))),
                     ),
                   ),
                 );
@@ -136,14 +210,14 @@ class _GameScreenState extends State<GameScreen> {
               margin: const EdgeInsets.only(bottom: 10),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const SizedBox(height: 20.0),
                 ElevatedButton(
                     onPressed: resetGame,
                     child: const Text('Restart Game', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)))),
               ])),
         ],
-      ), backgroundColor: const Color.fromRGBO(48, 84, 227, 89),
-      bottomNavigationBar: const CommonBottomBar(),
+      ), 
+      backgroundColor: const Color.fromRGBO(48, 84, 227, 89), //Background color
+      bottomNavigationBar: const CommonBottomBar(), 
     );
   }
 }
