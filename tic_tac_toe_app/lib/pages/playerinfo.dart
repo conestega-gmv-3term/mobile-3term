@@ -54,7 +54,8 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
 
     // Pick image from camera
     final XFile? image = await picker.pickImage(
-      source: ImageSource.camera, // Change this to camera
+      source: ImageSource
+          .camera, // Here I'm selecting the camera (could be gallery)
     );
 
     if (image != null) {
@@ -69,11 +70,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   }
 
   void startGame() {
+    // I'm making sure if the player don't put a name, a default Player 1 and Player 2 is send to the game screen
     final player1Name =
         player1Controller.text.isEmpty ? 'Player 1' : player1Controller.text;
     final player2Name =
         player2Controller.text.isEmpty ? 'Player 2' : player2Controller.text;
 
+    // Creating the Player instances to save
     final player1 = {
       'name': player1Name,
       'avatar': player1Avatar,
@@ -91,8 +94,10 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
       players[player2['name'] as String] = player2;
     });
 
+    // Save the player into the map
     savePlayers();
 
+    // Send it to the GameScreen
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -108,11 +113,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      // I'm using the CommonHeader we design for all screens
       appBar: const CommonHeader(pageTitle: 'Player info'),
       body: Column(
         children: [
           Expanded(
             child: Container(
+              // Wrapping around a Container so I can apply the style
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -185,6 +192,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     );
   }
 
+  // Widget to set the PlayerRow
   Widget buildPlayerRow(
     String label,
     TextEditingController controller,
@@ -203,11 +211,12 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               onTap: () =>
                   pickImage(isPlayer1), // Trigger pickImage method on tap
               child: CircleAvatar(
-                radius: 30, // Make it round
+                radius: 30, // Making it round
                 backgroundColor: Colors.grey[300], // Placeholder background
                 child: avatar == null
                     ? const Icon(Icons.camera_alt,
-                        size: 30) // Show camera icon if no avatar
+                        size:
+                            30) // I'm showing the camera icon if there is no avatar
                     : ClipOval(
                         child: Image.file(
                           File(avatar),
@@ -265,39 +274,12 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                       hintText: 'Or type a new name...',
                       border: OutlineInputBorder(),
                     ),
-                    onChanged: (value) {
-                      // Optionally validate or update the player list dynamically
-                    },
                   ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Debug widget to display saved players
-  Widget buildSavedPlayersDebugWidget() {
-    return Expanded(
-      child: ListView(
-        children: players.entries
-            .map(
-              (entry) => ListTile(
-                leading: entry.value['avatar'] != null
-                    ? Image.file(
-                        File(entry.value['avatar']),
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.person),
-                title: Text(entry.key),
-                subtitle: Text('Score: ${entry.value['score']}'),
-              ),
-            )
-            .toList(),
       ),
     );
   }
